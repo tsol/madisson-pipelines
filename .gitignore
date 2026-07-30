@@ -1,0 +1,30 @@
+# Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+venv/
+
+# Outputs
+output/
+*.png
+*.jpg
+*.jpeg
+*.webp
+
+# Models (large files)
+*.onnx
+*.safetensors
+*.ckpt
+*.pth
+
+# ComfyUI temp
+ComfyUI/temp/
+ComfyUI/output/
+
+# IDE
+.vscode/
+.idea/
+*.swp
