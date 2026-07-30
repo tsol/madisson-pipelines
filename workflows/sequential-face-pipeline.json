@@ -1,0 +1,134 @@
+{
+  "last_node_id": 25,
+  "last_link_id": 24,
+  "nodes": [
+    {
+      "id": 6,
+      "type": "CheckpointLoaderSimple",
+      "pos": [26, 474],
+      "size": [315, 98],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        ["MODEL", 0],
+        ["CLIP", 0],
+        ["VAE", 0]
+      ],
+      "widgets_values": ["zImageTurbo.safetensors"],
+      "shape": 3
+    },
+    {
+      "id": 7,
+      "type": "CLIPTextEncode",
+      "pos": [383, 320],
+      "size": [425.278, 180],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [["clip", 6, 1]],
+      "outputs": [["CONDITIONING", 0]],
+      "widgets_values": [
+        "mirror selfie, young woman, blonde wavy hair, soft morning light, white lace lingerie, cozy apartment, natural skin texture, film grain, 35mm, kodak portra, warm tones"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "CLIPTextEncode",
+      "pos": [383, 510],
+      "size": [425.278, 180],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [["clip", 6, 1]],
+      "outputs": [["CONDITIONING", 0]],
+      "widgets_values": ["blurry, low quality, watermark, text, deformed hands, extra fingers, cloned face, ugly"]
+    },
+    {
+      "id": 3,
+      "type": "KSampler",
+      "pos": [863, 186],
+      "size": [315, 262],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        ["model", 6, 0],
+        ["positive", 7, 0],
+        ["negative", 8, 0],
+        ["latent_image", 5, 0]
+      ],
+      "outputs": [["LATENT", 0]],
+      "widgets_values": [84729564523, "randomize", 4, 4.5, "dpmpp_2m", "karras", 1]
+    },
+    {
+      "id": 5,
+      "type": "EmptyLatentImage",
+      "pos": [851, 479],
+      "size": [315, 106],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [["LATENT", 0]],
+      "widgets_values": [832, 1216, 1]
+    },
+    {
+      "id": 9,
+      "type": "VAEDecode",
+      "pos": [1200, 186],
+      "size": [210, 46],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        ["samples", 3, 0],
+        ["vae", 6, 2]
+      ],
+      "outputs": [["IMAGE", 0]]
+    },
+    {
+      "id": 10,
+      "type": "SaveImage",
+      "pos": [1464, 186],
+      "size": [315, 270],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [["images", 9, 0]],
+      "widgets_values": ["z_turbo_output"]
+    },
+    {
+      "id": 24,
+      "type": "Note",
+      "pos": [26, 320],
+      "size": [315, 120],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "widgets_values": [
+        "Sequential Face Pipeline Stage 1:\nZ-Image-Turbo base generation.\nFace swap applied externally via scripts/faceswap.py"
+      ]
+    }
+  ],
+  "links": [
+    [1, 6, 0, 3, 0, "MODEL"],
+    [2, 6, 1, 7, 0, "CLIP"],
+    [3, 6, 1, 8, 0, "CLIP"],
+    [4, 7, 0, 3, 1, "CONDITIONING"],
+    [5, 8, 0, 3, 2, "CONDITIONING"],
+    [6, 5, 0, 3, 3, "LATENT"],
+    [7, 3, 0, 9, 0, "LATENT"],
+    [8, 6, 2, 9, 1, "VAE"],
+    [9, 9, 0, 10, 0, "IMAGE"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": { "scale": 1, "offset": [0, 0] }
+  },
+  "version": 0.4
+}
