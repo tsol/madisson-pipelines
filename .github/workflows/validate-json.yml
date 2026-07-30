@@ -1,0 +1,29 @@
+name: Validate Workflows
+
+on:
+  push:
+    paths:
+      - 'workflows/*.json'
+      - '.github/scripts/**'
+      - '.github/workflows/validate-json.yml'
+  pull_request:
+    paths:
+      - 'workflows/*.json'
+      - '.github/scripts/**'
+      - '.github/workflows/validate-json.yml'
+
+jobs:
+  validate-json:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate workflow JSON files
+        run: |
+          for f in workflows/*.json; do
+            echo "Checking $f"
+            python3 -c "import json; json.load(open('$f'))"
+          done
+
+      - name: Check required node types
+        run: python3 .github/scripts/check_nodes.py
